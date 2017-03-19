@@ -20,7 +20,7 @@ if __name__ == "__main__":
 	rep.show()
 	sp.call('clear',shell=True)
 
-	canciones = open("entrada.txt","r")
+	canciones = open("canciones.in","r")
 	n = int(canciones.readline())
 	lista = ArrayT(n)
 	can = canciones.readlines()
@@ -31,32 +31,34 @@ if __name__ == "__main__":
 		lista[x] = p
 
 	for x in lista:
-		c = Cancion(x[0],x[1],x[2])
-		rep.__playlist.agregar(c)
+		c = Cancion(x[1],x[0],x[2])
+		rep.playlist.agregar(c)
+
 
 	#############
 	# Menu loop #
 	#############
 
 	while True:
-		print("REPRODUCTOR DE KAUZE Y DAVID\
-				1.Listar canciones\
-				2.Agregar para sonar justo después de la canción actual\
-				3.Agregar para sonar justo antes de la canción actual\
-				4.Ordenar lista de reproducción por artista\
-				5.Ordenar lista de reproducción por titulo\
-				6.Eliminar canción por titulo\
-				7.Mostrar opciones\
-				8.Salir")
+		print("REPRODUCTOR DE KAUZE Y DAVID\n"
+				"1.Listar canciones\n"+
+				"2.Agregar para sonar justo después de la canción actual\n"+
+				"3.Agregar para sonar justo antes de la canción actual\n"+
+				"4.Ordenar lista de reproducción por artista\n"+
+				"5.Ordenar lista de reproducción por titulo\n"+
+				"6.Eliminar canción por titulo\n"+
+				"7.Mostrar opciones\n"+
+				"8.Salir")
 		opcion = input("-----> INTRODUCIR OPCIÓN: ")
-		if opcion == 1:
-			x = rep.__playlist #Lista de Reproducción
-			y = x.proxima.siguiente #Nodo
-			print("Titulo,Artista")
+		if int(opcion) == 1:
+			x = rep.playlist #Lista de Reproducción
+			y = x.proxima.siguiente.siguiente #Nodo
+			print("Artista,Titulo")
 			for i in range(x.count):
-				print(y.elemento.titulo+","+y.elemento.artista)
+				print(str(y.elemento.artista)+","+(y.elemento.titulo))
+				y = y.siguiente
 			continuar = input("--------PRESIONE ENTER PARA CONTINUAR--------")
-		elif opcion == 2:
+		elif int(opcion) == 2:
 			try:
 				c = Cancion(input("Titulo de la Canción: "),input("Artista de la Cancion: "),input("Archivo: "))
 				rep.sonarDespues(c)
@@ -65,7 +67,7 @@ if __name__ == "__main__":
 			except:
 				print("-----> Canción Inválida")
 				continuar = input("--------PRESIONE ENTER PARA CONTINUAR--------") 
-		elif opcion == 3:
+		elif int(opcion) == 3:
 			try:
 				c = Cancion(input("Titulo de la Canción: "),input("Artista de la Cancion: "),input("Archivo: "))
 				rep.sonarAntes(c)
@@ -74,23 +76,25 @@ if __name__ == "__main__":
 			except:
 				print("-----> Canción Inválida")
 				continuar = input("--------PRESIONE ENTER PARA CONTINUAR--------") 
-		elif opcion == 4:
-			rep.__playlist.ordenar_artista()
+		elif int(opcion) == 4:
+			rep.ordenar_por_artista()
 			print("-----> Lista Ordenada por artista")
 			continuar = input("--------PRESIONE ENTER PARA CONTINUAR--------")
-		elif opcion == 5:
-			rep.__playlist.ordenar_titulo()
+		elif int(opcion) == 5:
+			rep.ordenar_por_titulo()
 			print("-----> Lista Ordenada por titulo")
 			continuar = input("--------PRESIONE ENTER PARA CONTINUAR--------")
-		elif opcion == 6:
+		elif int(opcion) == 6:
 			titulo = input("Titulo de la canción: ")
 			rep.eliminar(titulo)
 			continuar = input("--------PRESIONE ENTER PARA CONTINUAR--------")
-		elif opcion == 7:
+		elif int(opcion) == 7:
 			pass
-		elif opcion == 8:
-			break
-
+		elif int(opcion) == 8:
+			sys.exit()
+		else:
+			print("-----> Opción no válida")
+			continuar = input("--------PRESIONE ENTER PARA CONTINUAR--------")
 	############
 	# Fin menu #
 	############

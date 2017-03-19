@@ -36,7 +36,8 @@ class ListaReproduccion(object):
 	def agregar_final(self,cancion):
 		# AGREGA CANCIONES JUSTO ANTES DEL ELEMENTO h DE LA LISTA PARA QUE SEA LA ULTIMA
 		self.proxima.anterior = NodoLista(self.proxima.anterior,cancion,self.proxima)
-		self.proxima.anterior.anterior.siguiente = self.proxima.anterior #Porque el proxima.anterior.anterior, es el anterior original.
+		self.proxima.anterior.anterior.siguiente = self.proxima.anterior
+		self.count += 1 #Porque el proxima.anterior.anterior, es el anterior original.
 
 	def merge(self,p,q,r,comparacion):
 		# Funcion merge del mergesort, que particiona y ordena
@@ -45,40 +46,62 @@ class ListaReproduccion(object):
 		m = r - q
 		L = ListaReproduccion()
 		R = ListaReproduccion()
-		x = self.nill
-		for i in range(r):
+		x = self.nill.siguiente
+		"""for i in range(r):
 		# Apunta al ultimo elemento, para añadirlo a R
-			x = x.siguiente
-		for i in range(m):
+			x = x.siguiente"""
+		for i in range(n):
 		# Añade las canciones a R desde el último apuntado, hasta la mitad
-			R.agregar(x)
-			x = x.anterior
-		for i in range(n): 
+			L.agregar(x.elemento)
+			x = x.siguiente
+		for i in range(m): 
 		# Añade a L desde el anterior a la última canción añadida a R hasta el
 		# la primera canción de la lista
-			L.agregar(x)
-			x = x.anterior
-		a = self.nill.siguiente
+			R.agregar(x.elemento)
+			x = x.siguiente
+		a = self.nill
+		for i in range(p):
+			a = a.siguiente
 		x1 = L.nill.siguiente
 		x2 = R.nill.siguiente
 		if comparacion == "es_menor_titulo":
 			for i in range(p,r+1):
 				if x1.elemento.es_menor_titulo(x2.elemento) == True:
-					a.elemento = x1.elemento
+					while True:
+						if x.elemento.es_igual(x1.elemento) == True:
+							break
+						else:
+							x = x.siguiente
+					a.elemento,x.elemento = x1.elemento,a.elemento
 					x1 = x1.siguiente
 					a = a.siguiente
 				else:
-					a.elemento = x2.elemento
+					while True:
+						if x.elemento.es_igual(x2.elemento) == True:
+							break
+						else:
+							x = x.siguiente
+					a.elemento,x.elemento = x2.elemento,a.elemento
 					x2 = x2.siguiente
 					a = a.siguiente
 		else:
 			for i in range(p,r+1):
 				if x1.elemento.es_menor_artista(x2.elemento) == True:
-					a.elemento = x1.elemento
+					while True:
+						if x.elemento.es_igual(x1.elemento) == True:
+							break
+						else:
+							x = x.siguiente
+					a.elemento,x.elemento = x1.elemento,a.elemento
 					x1 = x1.siguiente
 					a = a.siguiente
 				else:
-					a.elemento = x2.elemento
+					while True:
+						if x.elemento.es_igual(x2.elemento) == True:
+							break
+						else:
+							x = x.siguiente
+					a.elemento,x.elemento = x2.elemento,a.elemento
 					x2 = x2.siguiente
 					a = a.siguiente
 
@@ -105,13 +128,14 @@ class ListaReproduccion(object):
 		# Elimina una canción buscandola por el titulo
 		x = self.nill
 		eliminar = False
-		for i in range(self.count):
+		while True:
 			# Recorre la lista para ver si encuentra la cancion
 			if x.elemento.titulo == tituloCancion:
 				x.anterior.siguiente = x.siguiente
 				x.siguiente.anterior = x.anterior
 				self.count -= 1
 				eliminar = True
+				break
 			else:
 				x = x.siguiente
 		if eliminar == False:

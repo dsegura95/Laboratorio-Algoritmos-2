@@ -15,7 +15,8 @@ class Reproductor(QWidget):
 
         self.buffer = QBuffer()
         self.data = QByteArray()
-        self.__playlist = ListaReproduccion()
+        self.playlist = ListaReproduccion()
+
         
         format = QAudioFormat()
         format.setSampleSize(16)
@@ -79,10 +80,10 @@ class Reproductor(QWidget):
         if self.buffer.isOpen():
             self.buffer.close()
 
-        if self.__playlist.proxima == None:
+        if self.playlist.proxima == None:
             return
 
-        file = self.__playlist.proxima.elemento.archivo
+        file = self.playlist.proxima.elemento.archivo
         file.open(QIODevice.ReadOnly)
         
         self.data = file.readAll()
@@ -94,7 +95,7 @@ class Reproductor(QWidget):
         
         self.output.setVolume(0.5)
         
-        self.__playlist.proxima = self.__playlist.proxima.siguiente
+        self.playlist.proxima = self.playlist.proxima.siguiente
 
         self.output.start(self.buffer)
 
@@ -115,7 +116,7 @@ class Reproductor(QWidget):
             self.buffer.close()
 
     def next(self):
-        if self.__playlist.proxima == None:
+        if self.playlist.proxima == None:
             return
 
         self.output.stop()
@@ -123,15 +124,15 @@ class Reproductor(QWidget):
 
         
     def prev(self):
-        if self.__playlist.proxima == None:
+        if self.playlist.proxima == None:
             return
 
-        self.__playlist.proxima = self.__playlist.proxima.anterior.anterior
+        self.playlist.proxima = self.play.proxima.anterior.anterior
         self.output.stop()
         self.play()
 
     def eliminar(self, title):
-        self.__playlist.eleminar(title)
+        self.playlist.eleminar(title)
 
     def changeVolume(self, value):
         self.output.setVolume(value / 100)
@@ -140,14 +141,23 @@ class Reproductor(QWidget):
         if state == QAudio.IdleState:
             self.next()
 
+    def size(self):
+        return self.playlist.count
+
+    def ordenar_por_titulo(self):
+        self.playlist.ordenar_titulo()
+
+    def ordenar_por_artista(self):
+        self.playlist.ordenar_artista()
+
     def sonarDespues(self, s):
-        self.__playlist.agregar(s)
+        self.playlist.agregar(s)
 
     def sonarAntes(self, s):
-        if self.__playlist != None:
-            self.__playlist.proxima = self.__playlist.proxima.anterior
+        if self.playlist != None:
+            self.playlist.proxima = self.playlist.proxima.anterior
 
-        self.__playlist.agregar_final(s)
+        self.playlist.agregar_final(s)
 
-        if self.__playlist != None:
-            self.__playlist.proxima = self.__playlist.proxima.siguiente
+        if self.playlist != None:
+            self.playlist.proxima = self.playlist.proxima.siguiente
