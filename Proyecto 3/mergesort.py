@@ -6,6 +6,8 @@
 # AUTORES: Jesus Kauze y David Segura
 # EMAILS: 12-10273@usb.ve y 13-11341@usb.ve
 
+from arrayT import ArrayT
+
 def mergesort(arreglo):
 	k = 1
 	N= len(arreglo)

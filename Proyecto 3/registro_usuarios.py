@@ -55,37 +55,45 @@ class RegistroUsuarios(object):
 
 	def eliminarUsuario(self,usuario):
 		# Elimina usuarios registrados en la "base de datos".
-		key = h1(usuario.nombre) % len(self.tablaRU)
+		key = h1(usuario) % len(self.tablaRU)
 		lista = self.tablaRU[key]
 		if self.n == 0:
-			print("No hay usuarios")
+			print("No hay usuarios registrados.")
 			return False
 		else:
 			while lista != None:
 				if lista.next != None:
-					# Mientras el siguiente no sea el último elemento
-					if lista.next.element.nombre == nombre:
-						# Si es un elemento que no es ni el primero
-						# ni el último.
-						lista.next = lista.next.next
-						self.n -= 1
-						return True
-					elif lista.element.nombre == nombre:
-						# Si el elemento es el primero
-						lista.element = lista.next.element
-						lista.next = lista.next.next
-						self.n -= 1
-						return True
+					if lista.next.next != None:
+						# Mientras el siguiente no sea el último elemento
+						if lista.next.element.nombre == usuario:
+							# Si es un elemento que no es ni el primero
+							# ni el último.
+							lista.next = lista.next.next
+							self.n -= 1
+							return True
+						elif lista.element.nombre == usuario:
+							# Si el elemento es el primero
+							lista.element = lista.next.element
+							lista.next = lista.next.next
+							self.n -= 1
+							return True
+						else:
+							pass
 					else:
-						pass
+						if lista.element.nombre == usuario:
+							lista.element = None
+							self.n -= 1
+							return True
+						elif lista.next.element.nombre == usuario:
+							lista.next = None
+							self.n -=1
+							return True
+						else:
+							pass
 				else:
-					# Si el siguiente es el ultimo elemento
-					if lista.element.nombre == nombre:
-						lista.element = None
-						self.n -= 1
-						return True
-					else:
-						pass
+					self.tablaRU[key] = None
+					self.n -= 1
+					return True
 				lista = lista.next
 			return False
 
@@ -99,12 +107,13 @@ class RegistroUsuarios(object):
 		users = ArrayT(n)
 
 		for x in range(n):
-			t = abrir[x].strip("\n")
+			t = lista[x].strip("\n")
 			p = t.split("\t")
 			users[x] = p
 
 		for x in users:
-			u = Usuario(x[0],x[1],x[2],None)
+			u = Usuario()
+			u.crearUsuario(x[0],x[1],x[2],None)
 			self.agregarUsuario(u)
 
 	def mostrarRegistro(self):
@@ -121,11 +130,11 @@ class RegistroUsuarios(object):
 
 	def buscarUsuario(self,usuario):
 		# Busca a un usuario en la lista
-		key = h1(usuario.nombre) % len(self.tablaRU)
+		key = h1(usuario) % len(self.tablaRU)
 		lista = self.tablaRU[key]
 		while lista != None:
-			if lista.element.nombre == usuario.nombre:
-				return True
+			if lista.element.nombre == usuario:
+				return True,lista.element
 			else:
 				lista = lista.next
 		return False

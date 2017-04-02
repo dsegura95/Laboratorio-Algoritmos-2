@@ -6,7 +6,6 @@
 # AUTORES: Jesus Kauze y David Segura
 # EMAILS: 12-10273@usb.ve y 13-11341@usb.ve
 
-#from cliente import Registro
 from arrayT import ArrayT
 from mergesort import mergesort
 
@@ -80,7 +79,7 @@ class Usuario(object):
 					break
 				else:
 					c = c.next
-			if Registro.buscarUsuario(usuario) == True and repetido == False:
+			if repetido == False:
 				c = self.contactos
 				self.centinela = self.contactos
 				lista = ArrayT(count+1)
@@ -90,11 +89,18 @@ class Usuario(object):
 					c = c.next
 					count -= 1
 					t += 1
-				lista[t+1] = usuario
+				lista[0] = usuario
+				t = t + 1
 				ordenado = mergesort(lista)
-				for x in ordenado:
-					self.centinela.element = x
-					self.centinela = self.centinela.next
+				for x in range(t):
+					self.centinela.element = ordenado[x]
+					if x != t - 2:
+						self.centinela = self.centinela.next
+					elif x == t - 2:
+						self.centinela.next = Lista(ordenado[x+1],None)
+						self.centinela = self.centinela.next
+					else:
+						pass
 				return True
 			else:
 				return False
@@ -106,15 +112,20 @@ class Usuario(object):
 			if lista.next != None:
 				if lista.next.element.nombre == nombre:
 					lista.next = lista.next.next
+					return True
 				elif lista.element.nombre == nombre:
 					lista.element = lista.next.element
 					lista.next = lista.next.next
+					return True
 				else:
 					pass
 			else:
 				if lista.element.nombre == nombre:
 					lista.element = None
+					return True
 			lista = lista.next
+		print("Usuario no encontrado")
+		return False
 
 	def mostrarContactos(self):
 		# Muestra los contactos del usuario

@@ -9,6 +9,7 @@
 from usuario import Usuario
 from registro_usuarios import RegistroUsuarios
 from prueba import h1
+import sys
 #from chat import Chat
 #from conversaciones import Conversaciones
 
@@ -23,8 +24,10 @@ while True:
 		"* (3) Cargar usuarios               *\n"+
 		"* (4) Eliminar usuario              *\n"+
 		"* (5) Cargar caritas                *\n"+
+		"* (6) Salir                         *\n"+
 		"*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*")
 	opcion = input("~~~~> INTRODUCIR OPCIÓN: ")
+	#try:
 	if int(opcion) == 1:
 		print("~~~~REGISTRARSE~~~~")
 		nombre = input("> Nombre: ")
@@ -49,15 +52,15 @@ while True:
 		nombre = input("> Nombre: ")
 		contrasena = input("> Contraseña: ")
 		key = h1(nombre) % len(Registro.tablaRU)
-
 		lista = Registro.tablaRU[key]
 		menu = False
 		while lista != None:
 			if lista.element.nombre == nombre:
 				if lista.element.password == contrasena:
 					menu = True
+					usuario = lista.element
 					while True:
-						print(">>> SESIÓN: "+lista.element.nombre+" <<<\n"
+						print(">>> SESIÓN: "+usuario.nombre+" <<<\n"
 							"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"+
 							"| (1) Agregar Contacto              |\n"+
 							"| (2) Eliminar Contacto             |\n"+
@@ -69,8 +72,62 @@ while True:
 							"| (8) Cerrar Sesión                 |\n"
 							"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 						opcion = input("~~~~> INTRODUCIR OPCIÓN: ")
+						#try:
+						if int(opcion) == 1:
+							print("....AGREGAR CONTACTO....")
+							contacto = input("> Contacto: ")
+							if Registro.buscarUsuario(contacto)[0] == True:
+								if usuario.agregarContacto(Registro.buscarUsuario(contacto)[1]) == True:
+									print(">>> Contacto Agregado")
+									continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+								else:
+									continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+							else:
+								print(">>> ERROR: El contacto indicado no está registrado.")
+								continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+						elif int(opcion) == 2:
+							print("....ELIMINAR CONTACTO....")
+							contacto = input("> Contacto: ")
+							if usuario.eliminarContacto(contacto) == True:
+								print(">>> Contacto Eliminado")
+								continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+							else:
+								continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+						elif int(opcion) == 3:
+							print("....MOSTRAR CONTACTOS....")
+							usuario.mostrarContactos()
+							continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+						elif int(opcion) == 4:
+							print("....VER CONVERSACIÓN....")
+							# AQUI
+							# KAUZE
+							continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+						elif int(opcion) == 5:
+							print("....ENVIAR MENSAJE....")
+							# AQUI
+							# KAUZE
+							continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+						elif int(opcion) == 6:
+							print("....CARITAS....")
+							# AQUI
+							# KAUZE
+							continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+						elif int(opcion) == 7:
+							print("....USUARIOS REGISTRADOS....")
+							Registro.mostrarRegistro()
+						elif int(opcion) == 8:
+							print(">>> SESIÓN CERRADA")
+							continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+							break
+						"""except:
+							print(">>> ERROR: OPCIÓN INVÁLIDA")
+							continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")"""
+					break	
 				else:
 					print(">>> ERROR: CONTRASEÑA INCORRECTA")
+					continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+					menu = True
+					break
 			else:
 				lista = lista.next
 		if menu == True:
@@ -78,6 +135,32 @@ while True:
 		else:
 			print(">>> ERROR: USUARIO NO ENCONTRADO")
 			continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+	elif int(opcion) == 3:
+		print("~~~~CARGAR USUARIOS~~~~")
+		archivo = input("> Indique nombre del archivo: ")
+		try:
+			Registro.cargarUsuarios(archivo)
+			print(">>> Usuarios cargados.")
+			continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+		except:
+			print(">>> ERROR: ARCHIVO NO ENCONTRADO.")
+			continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+	elif int(opcion) == 4:
+		print("~~~~ELIMINAR USUARIO~~~~")
+		us = input("> Usuario: ")
+		if Registro.eliminarUsuario(us) == True:
+			print(">>> Usuario Eliminado")
+			continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+		else:
+			continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+	elif int(opcion) == 5:
+		print("~~~~CARGAR CARITAS~~~~")
+		# AQUI
+		# KAUZE
+		continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
 	else:
 		print(">>> ERROR: Opción Inválida")
 		continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")
+	"""except: 
+		print(">>> ERROR: Opción Inválida")
+		continuar = input("~~~~~~~~PRESIONE ENTER PARA CONTINUAR~~~~~~~~")"""
