@@ -10,8 +10,7 @@
 from arrayT import ArrayT
 from usuario import Usuario
 from usuario import Lista
-#from conversacion import h1
-from prueba import h1
+from conversaciones import h1
 
 class RegistroUsuarios(object):
 	def __init__(self):
@@ -137,4 +136,4 @@ class RegistroUsuarios(object):
 				return True,lista.element
 			else:
 				lista = lista.next
-		return False
+		return False,None

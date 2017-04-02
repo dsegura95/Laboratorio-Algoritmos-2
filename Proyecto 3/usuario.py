@@ -74,7 +74,7 @@ class Usuario(object):
 			c = self.contactos
 			while c != None:
 				if c.element.nombre == usuario.nombre:
-					print("El usuario ya está en la lista")
+					print("El contacto ya está en la lista")
 					repetido = True
 					break
 				else:
@@ -124,7 +124,7 @@ class Usuario(object):
 					lista.element = None
 					return True
 			lista = lista.next
-		print("Usuario no encontrado")
+		print("Contacto no encontrado")
 		return False
 
 	def mostrarContactos(self):
